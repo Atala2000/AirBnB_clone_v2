@@ -1,25 +1,26 @@
 #!/usr/bin/env bash
-# Install Nginx if not already installed
-sudo apt-get update
+# sets up for deployment
+
+sudo apt-get -y update
 sudo apt-get -y install nginx
 
-# Create necessary folders if they don't exist
-sudo mkdir -p /data/web_static/{releases/test,shared}
-sudo touch /data/web_static/releases/test/index.html
-echo "This is a simple test" | sudo tee /data/web_static/releases/test/index.html
+#creating folders if not already exist
+sudo mkdir -p /data/web_static/releases/test/
+sudo mkdir -p /data/web_static/shared/
 
-# Create or recreate symbolic link
+#creating sample html file for  testing
+sudo touch /data/web_static/releases/test/index.html
+echo "This is a test" | sudo tee /data/web_static/releases/test/index.html > /dev/null
+
+#creating a symbol link
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-# Give ownership of /data/ folder to ubuntu user and group recursively
-sudo chown -R ubuntu:ubuntu /data/
+#assigning ownership of /data/ to ubuntu
+chown -R ubuntu:ubuntu /data/
 
-# Update Nginx configuration
-nginx_config="/etc/nginx/sites-available/default"
-nginx_alias="location /hbnb_static { alias /data/web_static/current/; }"
-if ! grep -qF "$nginx_alias" "$nginx_config"; then
-    sudo sed -i "/server_name _;/a $nginx_alias" "$nginx_config"
-fi
+#editing the nginx config file
+str="\\\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\tindex index.html 0-index.html 0-index.htm;\n\t}"
+sudo sed -i "/^\tserver_name .*;/a ${str}" /etc/nginx/sites-enabled/default
 
-# Restart Nginx
+# restart nginx
 sudo service nginx restart
