@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# sets up for deployment
+# script that sets up your web servers for the deployment of web_static
 
 sudo apt-get -y update
 sudo apt-get -y install nginx
@@ -19,9 +19,8 @@ sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 chown -R ubuntu:ubuntu /data/
 
 #editing the nginx config file
-str=$'\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t\tindex index.html 0-index.html 0-index.htm;\n\t}'
-sudo sed -i "/^\tserver_name .*;/a $str" /etc/nginx/sites-enabled/default
-
+str="\\\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\tindex index.html 0-index.html 0-index.htm;\n\t}"
+sudo sed -i "/^\tserver_name .*;/a ${str}" /etc/nginx/sites-enabled/default
 
 # restart nginx
 sudo service nginx restart
