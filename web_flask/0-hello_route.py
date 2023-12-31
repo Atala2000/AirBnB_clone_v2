@@ -1,9 +1,11 @@
+#!/usr/bin/python3
 from flask import Flask
 
 """
 Module for creating Flask instance
 """
 app = Flask(__name__)
+
 
 @app.route("/", strict_slashes=False)
 def index():
