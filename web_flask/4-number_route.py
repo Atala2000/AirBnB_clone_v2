@@ -1,9 +1,9 @@
 #!/usr/bin/python3
-from flask import Flask
-
 """
 Module for creating Flask instance
 """
+from flask import Flask
+
 app = Flask(__name__)
 
 
