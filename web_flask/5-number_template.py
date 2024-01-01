@@ -1,69 +1,45 @@
 #!/usr/bin/python3
-"""
-Module for creating Flask instance
-"""
+""" starts a Flask web application"""
 
-from flask import Flask, render_template
+from flask import Flask
+from flask import render_template
 
 app = Flask(__name__)
 
 
 @app.route("/", strict_slashes=False)
-def index():
-    """
-    Creates route for /
-    """
+def hello():
     return "Hello HBNB!"
 
 
 @app.route("/hbnb", strict_slashes=False)
-def hbnb():
-    """
-    Create route for /hbnb
-    """
+def display():
     return "HBNB"
 
 
 @app.route("/c/<text>", strict_slashes=False)
-def text(text):
+def display_c(text):
     """
-    Returns user specified route
-    Args:
-        text: the text that will be returned
+    display “C ” followed by the value of the text
     """
-    changed_text = text.replace("_", " ")
-    return f"C {changed_text}"
+    return "C {}".format(text.replace("_", ""))
 
 
 @app.route("/python/<text>", strict_slashes=False)
-@app.route("/python/", strict_slashes=False)
-def python(text="is cool"):
-    """
-    Returns user specified route
-    """
-    changed_text = text.replace("_", " ")
-    return f"Python {changed_text}"
+def display_python(text="is cool"):
+    return "Python {}".format(text.replace("_", ""))
 
 
 @app.route("/number/<int:n>", strict_slashes=False)
-def number(n):
-    """
-    Returns if n is an integer
-    Args:
-        n: number
-    """
-    return f"{n} is a number"
+def display_number(n):
+    return "{} is a number".format(n)
 
 
 @app.route("/number_template/<int:number>", strict_slashes=False)
-def template(number):
-    """
-    Returns a template if number is an integer
-    Args:
-        number: The digit to check
-    """
+def html_page(number):
     return render_template("5-number.html", number=number)
 
 
 if __name__ == "__main__":
+    """Run the Flask app on 0.0.0.0, port 5000"""
     app.run(host="0.0.0.0", port=5000)
